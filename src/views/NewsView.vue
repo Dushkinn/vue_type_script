@@ -7,6 +7,13 @@
       <v-col cols="4" v-for="item in news" :key="item.pubDate">
         <PostComponent class="mb-10" :post="item"></PostComponent>
       </v-col>
+      <v-col v-if="isNewsLoading" cols="12" class="text-center">
+        <v-progress-circular
+          class="news-page__progress"
+          :size="100"
+          indeterminate
+        ></v-progress-circular>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -25,18 +32,18 @@ export default defineComponent({
   setup: function () {
     const store = useStore();
     const scrollComponent = ref(null);
+    const isNewsLoading = ref(false);
     let newsError = false;
-    let isNewsLoading = false;
     const loadNextNews = function () {
-      if (!isNewsLoading) {
-        isNewsLoading = true;
+      if (!isNewsLoading.value) {
+        isNewsLoading.value = true;
         store
           .dispatch(actionType.getNextNews)
           .catch(() => {
             newsError = true;
           })
           .finally(() => {
-            isNewsLoading = false;
+            isNewsLoading.value = false;
           });
       }
     };
@@ -47,7 +54,10 @@ export default defineComponent({
       }
     };
     onMounted(() => {
-      store.dispatch(actionType.getNews);
+      isNewsLoading.value = true;
+      store.dispatch(actionType.getNews).finally(() => {
+        isNewsLoading.value = false;
+      });
       window.addEventListener("scroll", handleScroll);
     });
     onUnmounted(() => {
@@ -59,6 +69,7 @@ export default defineComponent({
       >,
       scrollComponent: scrollComponent,
       newsError: newsError,
+      isNewsLoading: isNewsLoading,
     };
   },
 });
@@ -67,5 +78,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .news-page {
   padding-top: 30px;
+  padding-bottom: 100px;
 }
 </style>

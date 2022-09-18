@@ -12,14 +12,9 @@
     <v-card-subtitle> {{ post.category.join(", ") }} </v-card-subtitle>
 
     <v-card-actions>
-      <v-btn color="orange-lighten-2" variant="text"> Explore </v-btn>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-        @click="toggleCardContent()"
-      ></v-btn>
+      <v-btn color="orange-lighten-2" variant="text" @click="goTo(post.link)">
+        Explore
+      </v-btn>
     </v-card-actions>
 
     <v-expand-transition>
@@ -53,8 +48,8 @@ export default defineComponent({
   },
   name: "PostComponent",
   methods: {
-    toggleCardContent() {
-      this.show = !this.show;
+    goTo(path: string) {
+      window.open(path, "_blank");
     },
   },
 });
