@@ -4,7 +4,7 @@ import type { AxiosResponse } from "axios";
 import type NewsResponse from "@/models/news/NewsResponse";
 import type News from "@/models/news/news";
 const moduleName = "news";
-const apiKey = "pub_110988efc6a6768582586353aa7e8aa1eb9cf";
+const apiKey = "pub_11098052827a7bff77e9ac3e0df057e4e26cc";
 
 export const mutationType = {
   getNewsSuccess: `[${moduleName}] getNewsSuccess`,
@@ -19,6 +19,7 @@ export const actionType = {
 
 export const getterType = {
   getNews: `[${moduleName}] getNews`,
+  getPage: `[${moduleName}] getPage`,
 };
 
 class StateType {
@@ -48,10 +49,10 @@ const newsModule: StoreOptions<any> = {
     async [actionType.getNews](context) {
       return new Promise((resolve) => {
         httpNews
-          .get(`${this.state.page}/apikey=${apiKey}`)
+          .get(`1/news?apikey=${apiKey}&language=en&page=${context.state.page}`)
           .then((response: AxiosResponse<NewsResponse>) => {
             if (response.data) {
-              context.commit(mutationType.getNewsSuccess, response.data);
+              context.commit(mutationType.getNextNewsSuccess, response.data);
               resolve(undefined);
             }
           });
@@ -65,6 +66,9 @@ const newsModule: StoreOptions<any> = {
   getters: {
     [getterType.getNews]: (state: StateType) => {
       return state.news;
+    },
+    [getterType.getPage]: (state: StateType) => {
+      return state.page;
     },
   },
 };

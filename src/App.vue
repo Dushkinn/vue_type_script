@@ -1,13 +1,13 @@
 <template>
   <v-app id="inspire">
     <header-layout></header-layout>
-    <v-main class="grey lighten-3">
+    <v-main class="bg-grey-lighten-4">
       <v-container>
         <v-row>
           <v-col cols="2">
             <side-menu-layout></side-menu-layout>
           </v-col>
-          <v-col>
+          <v-col cols="10" class="pt-0 bg-white">
             <router-view />
           </v-col>
         </v-row>
